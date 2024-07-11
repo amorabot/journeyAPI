@@ -30,12 +30,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-    - name: Build docker image
-      run: docker build -t amorabot/journey-api:${{ steps.generate_sha.outputs.sha }} .
-
-    
-    - name: Push docker image
-      run: |
-        docker push amorabot/journey-api:${{ steps.generate_sha.outputs.sha }}
-        docker tag amorabot/journey-api:${{ steps.generate_sha.outputs.sha }} amorabot/journey-api:latest
-        docker push amorabot/journey-api:latest
+    - name: Build and Push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: |
+          amorabot/journey-api:${{ steps.generate_sha.outputs.sha }}
+          amorabot/journey-api:latest
